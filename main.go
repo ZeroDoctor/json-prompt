@@ -10,7 +10,7 @@ import (
 	"github.com/zerodoctor/json-prompt/jsontype"
 )
 
-func getInput() (string, error) {
+func getInput() ([]byte, error) {
 	args := os.Args[1:]
 	if len(args) <= 0 {
 		info, err := os.Stdin.Stat()
@@ -20,7 +20,7 @@ func getInput() (string, error) {
 		}
 		if info.Mode()&os.ModeNamedPipe == 0 {
 			fmt.Println("Usage: <json-output> | json-prompt [<json-hardcoded>]") // change this later
-			return "", errors.New("Error: unexpected format")
+			return []byte(""), errors.New("Error: unexpected format")
 		}
 
 		output, err := ioutil.ReadAll(os.Stdin)
@@ -28,10 +28,10 @@ func getInput() (string, error) {
 			fmt.Println("Failed to read input")
 		}
 
-		return string(output), nil
+		return output, nil
 	}
 
-	return string(args[0]), nil
+	return []byte(args[0]), nil
 }
 
 func main() {
@@ -40,15 +40,15 @@ func main() {
 
 	jsonInput, err := getInput()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("ERROR: ", err)
 		return
 	}
 
 	var resultMap interface{}
-	err = json.Unmarshal([]byte(jsonInput), &resultMap)
+	err = json.Unmarshal(jsonInput, &resultMap)
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("ERROR:", err)
 	}
 
 	jsontype.FindType(resultMap, 0)

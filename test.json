@@ -1,0 +1,28 @@
+[
+    {
+        "id": 0,
+        "name": "object",
+        "foods": [
+            "steak",
+            "ice cream"
+        ],
+        "location":{
+            "x": 123.54,
+            "y": 2340.32,
+            "z": -73.34
+        }
+    },
+    {
+        "id": 1,
+        "name": "another-object",
+        "foods": [
+            "pork",
+            "smoothie"
+        ],
+        "location":{
+            "x": 763.34,
+            "y": -10.62,
+            "z": 103.44
+        }
+    }
+]

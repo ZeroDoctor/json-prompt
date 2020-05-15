@@ -10,27 +10,33 @@ func typeof(result interface{}) string {
 }
 
 func itArray(json []interface{}, scope int) int {
+	insertTab(scope - 1)
+	fmt.Println("[")
 	for _, v := range json {
+		insertTab(scope)
 		FindType(v, scope)
-		fmt.Println("")
 	}
-
+	insertTab(scope - 1)
+	fmt.Println("]")
 	return scope
 }
 
-func itMap(json map[string]interface{}, scope int) int {
-	for k, v := range json {
+func itMap(json map[string]interface{}, sortedKeys []string, scope int) int {
+	insertTab(scope - 1)
+	fmt.Println("{")
+	for k := range sortedKeys {
 		insertTab(scope)
-		fmt.Print(k, ": ")
-		FindType(v, scope)
+		fmt.Print("\"", sortedKeys[k], "\": ")
+		FindType(json[sortedKeys[k]], scope)
 	}
-
+	insertTab(scope - 1)
+	fmt.Println("}")
 	return scope
 }
 
 func insertTab(amount int) {
 	for i := 0; i < amount; i++ {
-		fmt.Print("   ") // 3 spaces
+		fmt.Print("  ") // 2 spaces
 	}
 }
 
@@ -38,18 +44,20 @@ func insertTab(amount int) {
 func FindType(json interface{}, level int) {
 	switch typeof(json) {
 	case "[]interface {}":
+		fmt.Println("")
 		level = itArray(json.([]interface{}), level+1)
 	case "map[string]interface {}":
-		fmt.Print("\n")
-		level = itMap(json.(map[string]interface{}), level+1)
+		fmt.Println("")
+		jsonMap := json.(map[string]interface{})
+		level = itMap(jsonMap, SortMap(jsonMap), level+1)
+	case "string":
+		fmt.Printf("\"%s\",\n", json.(string))
+	case "float64":
+		fmt.Printf("%g,\n", json.(float64))
+	case "int":
+		fmt.Printf("%d,\n", json.(int))
 	case "interface {}":
 		fmt.Println("is object")
-	case "string":
-		fmt.Println(json.(string))
-	case "float64":
-		fmt.Println(json.(float64))
-	case "int":
-		fmt.Println(json.(int))
 	default:
 		fmt.Println("could not find type ", typeof(json))
 	}
