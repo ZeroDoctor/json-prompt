@@ -9,6 +9,6 @@ Created this for two reasons:
 
 # Testing
 one way to test this would to do:
-	cat test.json | go run main.go
+    cat test.json | go run main.go
 or for windows:
-	type test.json | go run main.go
+    type test.json | go run main.go
